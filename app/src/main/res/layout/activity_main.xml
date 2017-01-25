@@ -1,0 +1,47 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="drew.runnergame.main"
+    android:background="#ffffff"
+    android:id="@+id/FrameLayout">
+
+    <!-- The primary full-screen view. This can be replaced with whatever view
+         is needed to present your content, e.g. VideoView, SurfaceView,
+         TextureView, etc. -->
+
+    <!-- This FrameLayout insets its children based on system windows using
+         android:fitsSystemWindows. -->
+
+    <Button
+        android:layout_width="100dp"
+        android:layout_height="60dp"
+        android:text="Exit"
+        android:id="@+id/button"
+        android:layout_gravity="right|center_vertical"
+        android:clickable="true" />
+
+    <Button
+        android:layout_width="100dp"
+        android:layout_height="60dp"
+        android:text="Hi Scores"
+        android:id="@+id/button3"
+        android:layout_gravity="left|center_vertical"
+        android:clickable="true" />
+
+    <Button
+        android:layout_width="210dp"
+        android:layout_height="110dp"
+        android:id="@+id/button2"
+        android:layout_gravity="center"
+        android:text="Run!"
+        android:textSize="48dp"
+        android:clickable="true" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"></LinearLayout>
+
+</FrameLayout>
