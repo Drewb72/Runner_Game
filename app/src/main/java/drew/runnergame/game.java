@@ -74,18 +74,18 @@ public class game extends Activity {
             getPlatform();
 
         }
-        public void getObstacle() {
+       /* public void getObstacle() {
             obstacleX --;
             if (obstacleX == 0){
                 obstacleX = 500;
             }
             frameHeight = platformHeight-110;
-        }
+        }*/
         public void getRunner() {
             runnerX = (numBlocksWide / 4);
             runnerY = (numBlocksHigh / 2);
         }
-        public void getPlatform() {
+        /*public void getPlatform() {
             Random randInt = new Random();
             int dif = randInt.nextInt(150);
             int platformRandomness = randInt.nextInt(2);
@@ -103,7 +103,7 @@ public class game extends Activity {
             if (platformHeight > 1800){
                 platformHeight = platformHeight - 150;
             }
-            }
+            }*/
 
         @Override
         public void run() {
