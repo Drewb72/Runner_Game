@@ -1,19 +1,40 @@
 package drew.runnergame;
 
-import android.content.res.
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+
 import java.util.Random;
 
 public class platform {
     private int height;
     private Bitmap image;
     private int speed;
+    private int x;
+    private boolean living;
+    public obstacle obs;
 
-    public platform(){
-        this.speed = 5;;
-        this.image =  BitmapFactory.decodeResource(getResources(), R.drawable.platform);
+
+
+    public platform(Resources res) {
+        this.speed = 12;
+        this.image = BitmapFactory.decodeResource(res, R.drawable.platform);
+        this.image = Bitmap.createScaledBitmap(this.image, 600, 50, false);
+        this.x = 400;
+        this.living = true;
         this.height = 1200;
+        obs = new obstacle(res, this.height, this.speed, this.x, this.living);
+    }
+
+    public Bitmap getImage(){
+        return this.image;
+    }
+
+    public int getX(){
+        return this.x;
+    }
+
+    public int getHeight(){
         Random randInt = new Random();
         int dif = randInt.nextInt(150);
         int platformRandomness = randInt.nextInt(2);
@@ -31,9 +52,19 @@ public class platform {
         if (this.height > 1800){
             this.height -= 150;
         }
+
+        return this.height;
     }
 
-    public int getHeight() {
-        return this.height;
+    public boolean isLiving(){
+        return this.living;
+    }
+
+    public void update(){
+        this.x-=this.speed;
+        if (this.x<0){
+            this.living = false;
+        }
+        obs.update();
     }
 }

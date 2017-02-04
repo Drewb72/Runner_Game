@@ -51,7 +51,7 @@ public class main extends Activity{
         runnerMap = BitmapFactory.decodeResource(res, R.drawable.stick_figure);
         runnerView1 = new runnerView(this);
         setContentView(runnerView1);
-        j = new Intent (this, game.class);
+        j = new Intent (this, gameplay.class);
     }
        /* btn[0] = (Button) findViewById(R.id.button);
         btn[1] = (Button) findViewById(R.id.button2);
