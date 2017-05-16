@@ -3,26 +3,29 @@ package drew.runnergame;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
-public class gameplay extends Activity {
+public class Gameplay extends Activity {
 
     Canvas canv;
     runnerView runnerView1;
-    runner Runner;
-    platform plat;
-    Bitmap obstacleMap;
+    Runner runner1;
+    Platform plat1;
+    Platform plat2;
     int hi;
     int score;
     int fps;
+    int height;
+    int width;
+    int runnerHeight;
     long lastFrameTime;
 
     @Override
@@ -30,7 +33,6 @@ public class gameplay extends Activity {
         super.onCreate(savedInstanceState);
         runnerView1 = new runnerView(this);
         setContentView(runnerView1);
-        obstacleMap = BitmapFactory.decodeResource(getResources(), R.drawable.block);
     }
 
     class runnerView extends SurfaceView implements Runnable {
@@ -43,9 +45,13 @@ public class gameplay extends Activity {
             super(context);
             ourHolder = getHolder();
             paint = new Paint();
-            plat = new platform(getResources());
-
+            plat1 = new Platform(getResources(), 0);
+            plat2 = new Platform(getResources(), 1200);
+            height = plat1.getHeight();
+            width = plat1.getWidth();
+            runner1 = new Runner(getResources(), 200, height - width);
         }
+
 
         @Override
         public void run() {
@@ -53,8 +59,35 @@ public class gameplay extends Activity {
                 //updateGame();
                 controlFPS();
                 drawGame();
+                if (!plat1.isLiving()) {
+                    plat1 = new Platform(getResources(), 1400);
+                }
+                if (!plat2.isLiving()) {
+                    plat2 = new Platform(getResources(), 1400);
+                    runnerHeight = runner1.getHeight();
+                }
+                /*if (plat1.getX() >= 0 && plat1.getX() <= plat1.getLength()){
+                    height = plat1.getHeight();
+                    width = plat1.getWidth();
+                }
+                if (plat2.getX() >= 0 && plat2.getX() <= plat2.getLength()) {
+                    height = plat2.getHeight();
+                    width = plat2.getWidth();
+                }*/
             }
         }
+
+        @Override
+        public boolean onTouchEvent(MotionEvent event) {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                runner1.jump();
+            }
+            if (event.getAction() == MotionEvent.ACTION_UP) {
+                runner1.dontJump();
+            }
+            return true;
+        }
+
 
         public void drawGame() {
             if (ourHolder.getSurface().isValid()) {
@@ -64,16 +97,29 @@ public class gameplay extends Activity {
                 paint.setTextSize(75);
                 canv.drawText("  Score: " + score + "                           High Score: "
                         + hi, 10, 2200, paint);
-                canv.drawBitmap(plat.getImage(), plat.getX(), plat.getHeight(), paint);
-                canv.drawBitmap(plat.obs.getImage(), plat.obs.getX(), plat.obs.getHeight(), paint);
-                plat.update();
+                canv.drawBitmap(plat1.getImage(), plat1.getX(), plat1.getHeight(), paint);
+                canv.drawBitmap(plat1.obs.getImage(), plat1.obs.getX(), plat1.obs.getHeight(), paint);
+                plat1.update();
+                canv.drawBitmap(plat2.getImage(), plat2.getX(), plat2.getHeight(), paint);
+                canv.drawBitmap(plat2.obs.getImage(), plat2.obs.getX(), plat2.obs.getHeight(), paint);
+                plat2.update();
+                //runner1.collidePlatform(plat1);
+                plat1.collideRunner(runner1);
+                if (runner1.isUnderPlat()) {
+                    Log.i("onPlat", "X-Axis");
+                }
+                //runner1.collidePlatform(plat2);
+                plat2.collideRunner(runner1);
+                runner1.update(plat1);
+                runner1.update(plat2);
+                canv.drawBitmap(runner1.getImage(), runner1.getX(), runner1.getHeight() - 300, paint);
                 ourHolder.unlockCanvasAndPost(canv);
             }
         }
 
         public void controlFPS() {
             long timeThisFrame = (System.currentTimeMillis() - lastFrameTime);
-            long timeToSleep = 100 - timeThisFrame;
+            long timeToSleep = 15 - timeThisFrame;
             if (timeThisFrame > 0) {
                 fps = (int) (1000 / timeThisFrame);
             }
@@ -129,8 +175,7 @@ public class gameplay extends Activity {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == android.view.KeyEvent.KEYCODE_BACK) {
             runnerView1.pause();
-
-            Intent i = new Intent(this, drew.runnergame.main.class);
+            Intent i = new Intent(this, Main.class);
             startActivity(i);
             finish();
             return true;
@@ -138,4 +183,4 @@ public class gameplay extends Activity {
         return false;
     }
 }
-    //SOUNDCODE METHOD HERE
+//SOUNDCODE METHOD HERE
